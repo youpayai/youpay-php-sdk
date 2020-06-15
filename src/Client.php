@@ -20,12 +20,36 @@ class Client
         $this->api_key = $api_key;
     }
 
-    public static function auth()
+    /**
+     * Get API Token
+     *
+     * @param string $email
+     * @param string $password
+     * @param string $domain
+     *
+     * @return object [access_token, store_id] || ['status_code', 'message', 'error']
+     */
+    public static function auth($email, $password, $domain)
     {
-        return (object)[
-            'store_id'  => 'xxx-xxx-xxx',
-            'token'     => 'xxx'
-        ];
+        $client = new \GuzzleHttp\Client([
+            'base_uri' => 'http://local.youpay.ai/api',
+            'timeout'  => 2.0,
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ]
+        ]);
+
+        $response = $client->post('/api/login', [
+            'json' => [
+                'email'     => $email,
+                'password'  => $password,
+                'domain'    => $domain
+            ]
+        ]);
+
+        return json_decode(
+            $response->getBody()->getContents()
+        );
     }
 
     public function listOrders()
