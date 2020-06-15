@@ -30,24 +30,36 @@ class Client
 
     public function listOrders()
     {
-        $response = $this->client()->get('/order/list');
-        $body = $response->getBody()->getContents();
-        dd($body);
+        return json_decode(
+            $this->client()
+                ->get('/api/order/list')
+                ->getBody()
+                ->getContents()
+        );
     }
 
-    public function createOrder(Order $order)
+    public function createOrUpdateOrder(Order $order)
     {
-        $response = $this->client()->post('/order/create', array(
-            'json' => $order
-        ));
-        dd('hi');
-        $body = $response->getBody()->getContents();
-        dd($body);
+        return json_decode(
+            $this->client()
+                ->get('/api/order/create', array(
+                    'json' => $order
+                ))
+                ->getBody()
+                ->getContents()
+        );
     }
 
-    public function  updateOrder(Order $order)
+    public function  getOrder($id)
     {
-
+        return json_decode(
+            $this->client()
+                ->get('/api/order/create', array(
+                    'json' => $order
+                ))
+                ->getBody()
+                ->getContents()
+        );
     }
 
     /**
@@ -55,7 +67,7 @@ class Client
      */
     public function client()
     {
-        return $client = new \GuzzleHttp\Client([
+        $options = [
             // Base URI is used with relative requests
             'base_uri' => 'http://local.youpay.ai/api',
             // You can set any number of default request options.
@@ -64,7 +76,8 @@ class Client
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->api_key
             ]
-        ]);
+        ];
+        return $client = new \GuzzleHttp\Client($options);
     }
 
     public function request($path, $data = [], $type = 'GET')
