@@ -45,13 +45,7 @@ class Order
     /**
      * Static way to initialize the class
      *
-     * @param $order_id
-     * @param $store_id
-     * @param $title
-     * @param $order_items
-     * @param $extra_fees
-     * @param $sub_total
-     * @param $total
+     * @param array $fillable [order_id, store_id, title, order_items, extra_fees, sub_total, total]
      * @return Order
      */
     public static function create($fillable)

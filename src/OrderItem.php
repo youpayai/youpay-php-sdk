@@ -36,7 +36,7 @@ class OrderItem
     public $price;
 
     /**
-     * @var float
+     * @var int
      */
     public $quantity;
 
@@ -48,24 +48,35 @@ class OrderItem
     /**
      * Create Order Items
      *
-     * @param $fillable
+     * @param array $fillable [
+     *        string    title*,
+     *        string    product_id*,
+     *        float     price*,
+     *        int       quantity*,
+     *        float     total*,
+     *        string    description,
+     *        array     variants,
+     *        string    variants_display
+     * ]
      * @return OrderItem
      */
     public static function create($fillable)
     {
         $self = new self();
-
         $self->title = $fillable['title'];
-        $self->description = $fillable['description'];
         $self->product_id = $fillable['product_id'];
         $self->price = $fillable['price'];
         $self->quantity = $fillable['quantity'];
         $self->total = $fillable['total'];
 
-        if (!empty($fillable['variants'])) {
+        // Option Fields
+        if ( ! empty($fillable['description']) ) {
+            $self->description = $fillable['description'];
+        }
+        if ( ! empty($fillable['variants'])) {
             $self->variants = $fillable['variants'];
         }
-        if (!empty($fillable['variants_display'])) {
+        if ( ! empty($fillable['variants_display'])) {
             $self->variants_display = $fillable['variants_display'];
         }
 
