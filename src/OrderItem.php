@@ -8,6 +8,11 @@ class OrderItem
     /**
      * @var string
      */
+    public $product_id;
+
+    /**
+     * @var string
+     */
     public $title;
 
     /**
@@ -16,9 +21,9 @@ class OrderItem
     public $description;
 
     /**
-     * @var string
+     * @var string Product Image URL.
      */
-    public $product_id;
+    public $src;
 
     /**
      * @var array
@@ -51,6 +56,7 @@ class OrderItem
      * @param array $fillable [
      *        string    title*,
      *        string    product_id*,
+     *        string    src*,
      *        float     price*,
      *        int       quantity*,
      *        float     total*,
@@ -62,24 +68,25 @@ class OrderItem
      */
     public static function create($fillable)
     {
-        $self = new self();
-        $self->title = $fillable['title'];
-        $self->product_id = $fillable['product_id'];
-        $self->price = $fillable['price'];
-        $self->quantity = $fillable['quantity'];
-        $self->total = $fillable['total'];
+        $order = new self();
+        $order->title = $fillable['title'];
+        $order->product_id = $fillable['product_id'];
+        $order->price = $fillable['price'];
+        $order->quantity = $fillable['quantity'];
+        $order->total = $fillable['total'];
+        $order->src = $fillable['src'];
 
         // Option Fields
         if ( ! empty($fillable['description']) ) {
-            $self->description = $fillable['description'];
+            $order->description = $fillable['description'];
         }
         if ( ! empty($fillable['variants'])) {
-            $self->variants = $fillable['variants'];
+            $order->variants = $fillable['variants'];
         }
         if ( ! empty($fillable['variants_display'])) {
-            $self->variants_display = $fillable['variants_display'];
+            $order->variants_display = $fillable['variants_display'];
         }
 
-        return $self;
+        return $order;
     }
 }
