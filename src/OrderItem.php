@@ -26,6 +26,11 @@ class OrderItem
     public $src;
 
     /**
+     * @var string Product Image URL.
+     */
+    public $order_item_id;
+
+    /**
      * @var array
      */
     public $variants = [];
@@ -75,6 +80,7 @@ class OrderItem
         $order->quantity = $fillable['quantity'];
         $order->total = $fillable['total'];
         $order->src = $fillable['src'];
+        $order->order_item_id = $fillable['order_item_id'];
 
         // Option Fields
         if ( ! empty($fillable['description']) ) {
