@@ -76,9 +76,22 @@ class Order
      */
     public function create_order_item($fillable)
     {
-        $item = OrderItems::create($fillable);
+        $item = OrderItem::create($fillable);
 
         $this->order_items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * Create Order Item
+     *
+     * @param OrderItem $order_item
+     * @return $this
+     */
+    public function add_order_item($order_item)
+    {
+        $this->order_items[] = $order_item;
 
         return $this;
     }

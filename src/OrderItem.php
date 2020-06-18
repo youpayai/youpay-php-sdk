@@ -3,7 +3,7 @@
 namespace YouPaySDK;
 
 
-class OrderItems
+class OrderItem
 {
     /**
      * @var string
@@ -49,7 +49,7 @@ class OrderItems
      * Create Order Items
      *
      * @param $fillable
-     * @return OrderItems
+     * @return OrderItem
      */
     public static function create($fillable)
     {
