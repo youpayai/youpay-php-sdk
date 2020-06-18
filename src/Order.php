@@ -57,7 +57,6 @@ class Order
     {
         $self = new self();
         $self->order_id = $fillable['order_id'];
-        $self->store_id = $fillable['store_id'];
         $self->title = $fillable['title'];
         $self->sub_total = $fillable['sub_total'];
         $self->total = $fillable['total'];

@@ -74,13 +74,13 @@ class OrderItem
     public static function create($fillable)
     {
         $order = new self();
-        $order->title = $fillable['title'];
+        $order->order_item_id = $fillable['order_item_id'];
         $order->product_id = $fillable['product_id'];
+        $order->title = $fillable['title'];
+        $order->src = $fillable['src'];
         $order->price = $fillable['price'];
         $order->quantity = $fillable['quantity'];
         $order->total = $fillable['total'];
-        $order->src = $fillable['src'];
-        $order->order_item_id = $fillable['order_item_id'];
 
         // Option Fields
         if ( ! empty($fillable['description']) ) {
