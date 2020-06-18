@@ -65,7 +65,7 @@ class Order
         if ( ! empty( $fillable['store_id'] ) ) {
             $self->store_id = $fillable['store_id'];
         }
-        if ( ! empty( $fillable['extra_fees'] ) && is_array( $fillable['extra_fees'] ) ) {
+        if ( ! empty( $fillable['extra_fees'] ) ) {
             $self->extra_fees = $fillable['extra_fees'];
         }
         if ( ! empty( $fillable['order_items'] ) && is_array( $fillable['order_items'] ) ) {

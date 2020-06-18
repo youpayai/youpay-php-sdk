@@ -189,6 +189,7 @@ class Client
      */
     public function client()
     {
+        // TODO: prevent redirects. Should error out. Also increase timeout.
         $headers = ['Content-Type' => 'application/json'];
 
         if (!empty($this->token)) {
