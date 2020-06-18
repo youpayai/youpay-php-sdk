@@ -115,15 +115,9 @@ class Client
      */
     public function createOrUpdateOrder(Order $order)
     {
-        $path = '/api/order/create';
-
-        if ($order->id) {
-            $path = '/api/order/' . $order->id;
-        }
-
         return json_decode(
             $this->client()
-                ->post($path, [
+                ->post(($order->id) ? "/api/order/{$order->id}" : '/api/order/create', [
                     'json' => [
                         'order' => $order,
                         'store_id' => $this->store_id
