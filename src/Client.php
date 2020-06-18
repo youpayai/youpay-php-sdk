@@ -19,16 +19,9 @@ class Client
     private $store_id;
 
     /**
-     * Client constructor.
-     *
-     * @param string $token
-     * @param string $store_id
+     * @var string API Url
      */
-    public function __construct($token, $store_id = '')
-    {
-        $this->token = $token;
-        $this->store_id = $store_id;
-    }
+    public $api_url = 'https://app.youpay.ai/api';
 
     /**
      * Create the client
@@ -39,7 +32,10 @@ class Client
      */
     public static function create($token, $store_id = '')
     {
-        return new self($token, $store_id);
+        $self = new self();
+        return $self
+            ->setToken($token)
+            ->setStoreID($store_id);
     }
 
     /**
@@ -53,15 +49,9 @@ class Client
      */
     public static function auth($email, $password, $domain)
     {
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => 'http://local.youpay.ai/api',
-            'timeout' => 2.0,
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ]
-        ]);
+        $self = new self();
 
-        $response = $client->post('/api/login', [
+        $response = $self->client()->post('/api/login', [
             'json' => [
                 'email' => $email,
                 'password' => $password,
@@ -199,16 +189,45 @@ class Client
      */
     public function client()
     {
+        $headers = ['Content-Type' => 'application/json'];
+
+        if (!empty($this->token)) {
+            $headers['Authorization'] = 'Bearer ' . $this->token;
+        }
+
         return new \GuzzleHttp\Client([
             // Base URI is used with relative requests
-            'base_uri' => 'http://local.youpay.ai/api',
+            'base_uri' => $this->api_url,
             // You can set any number of default request options.
             'timeout' => 2.0,
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->token
-            ]
+            'headers' => $headers
         ]);
+    }
+
+    /**
+     * Set Token
+     *
+     * @param $token
+     * @return $this
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Set Store ID
+     *
+     * @param $store_id
+     * @return $this
+     */
+    public function setStoreID($store_id)
+    {
+        $this->store_id = $store_id;
+
+        return $this;
     }
 
     /**
@@ -235,7 +254,7 @@ class Client
      * @param null $youpay_id
      * @return mixed
      */
-    public function createOrder($fillable, $youpay_id = null)
+    public function createOrderFromArray($fillable, $youpay_id = null)
     {
         $order = $this->createOrderClass($fillable, $youpay_id);
         return $this->postOrder($order);
