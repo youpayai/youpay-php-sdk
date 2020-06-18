@@ -55,17 +55,17 @@ class Client
     {
         $client = new \GuzzleHttp\Client([
             'base_uri' => 'http://local.youpay.ai/api',
-            'timeout'  => 2.0,
-            'headers'  => [
+            'timeout' => 2.0,
+            'headers' => [
                 'Content-Type' => 'application/json',
             ]
         ]);
 
-        $response  = $client->post('/api/login', [
+        $response = $client->post('/api/login', [
             'json' => [
-                'email'     => $email,
-                'password'  => $password,
-                'domain'    => $domain
+                'email' => $email,
+                'password' => $password,
+                'domain' => $domain
             ]
         ]);
 
@@ -84,7 +84,7 @@ class Client
     {
         return json_decode(
             $this->client()
-                ->post( '/api/order/list', [
+                ->post('/api/order/list', [
                     'json' => [
                         'store_id' => $this->store_id
                     ]
@@ -102,7 +102,7 @@ class Client
     {
         return json_decode(
             $this->client()
-                ->get('/api/order/list' )
+                ->get('/api/order/list')
                 ->getBody()->getContents()
         );
     }
@@ -113,11 +113,13 @@ class Client
      * @param Order $order
      * @return mixed
      */
-    public function createOrUpdateOrder(Order $order)
+    public function postOrder(Order $order)
     {
+        $path = ($order->youpay_id) ? "/api/order/{$order->youpay_id}" : '/api/order/create';
+
         return json_decode(
             $this->client()
-                ->post(($order->id) ? "/api/order/{$order->id}" : '/api/order/create', [
+                ->post($path, [
                     'json' => [
                         'order' => $order,
                         'store_id' => $this->store_id
@@ -137,7 +139,7 @@ class Client
     {
         return json_decode(
             $this->client()
-                ->get( '/api/order/' . $id )
+                ->get('/api/order/' . $id)
                 ->getBody()->getContents()
         );
     }
@@ -152,7 +154,7 @@ class Client
     {
         return json_decode(
             $this->client()
-                ->get( '/api/store/' . $id )
+                ->get('/api/store/' . $id)
                 ->getBody()->getContents()
         );
     }
@@ -166,7 +168,7 @@ class Client
     {
         return json_decode(
             $this->client()
-                ->get( '/api/stores/list' )
+                ->get('/api/stores/list')
                 ->getBody()->getContents()
         );
     }
@@ -181,11 +183,11 @@ class Client
     {
         return json_decode(
             $this->client()
-                ->post( '/api/stores/find', [
+                ->post('/api/stores/find', [
                     'json' => [
                         'domain' => $domain
                     ]
-                ] )
+                ])
                 ->getBody()->getContents()
         );
     }
@@ -201,11 +203,41 @@ class Client
             // Base URI is used with relative requests
             'base_uri' => 'http://local.youpay.ai/api',
             // You can set any number of default request options.
-            'timeout'  => 2.0,
+            'timeout' => 2.0,
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $this->token
             ]
         ]);
+    }
+
+    /**
+     * Create Order class via the client.
+     *
+     * @see Order::create()
+     * @param $fillable
+     * @return Order
+     */
+    public function createOrderClass($fillable, $youpay_id = null)
+    {
+        $order = Order::create($fillable)
+            ->setStoreID($this->store_id);
+        if ($youpay_id) {
+            $order->setYouPayID($youpay_id);
+        }
+        return $order;
+    }
+
+    /**
+     * Create Order and Post to API
+     *
+     * @param $fillable
+     * @param null $youpay_id
+     * @return mixed
+     */
+    public function createOrder($fillable, $youpay_id = null)
+    {
+        $order = $this->createOrderClass($fillable, $youpay_id);
+        return $this->postOrder($order);
     }
 }

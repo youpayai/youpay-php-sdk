@@ -8,7 +8,7 @@ class Order
     /**
      * @var string|null
      */
-    public $id = null;
+    public $youpay_id = null;
 
     /**
      * @var string
@@ -63,10 +63,13 @@ class Order
         $self->total = $fillable['total'];
 
         // Optional
-        if (!empty($fillable['extra_fees']) && is_array($fillable['extra_fees'])) {
+        if ( ! empty( $fillable['store_id'] ) ) {
+            $self->store_id = $fillable['store_id'];
+        }
+        if ( ! empty( $fillable['extra_fees'] ) && is_array( $fillable['extra_fees'] ) ) {
             $self->extra_fees = $fillable['extra_fees'];
         }
-        if (!empty($fillable['order_items']) && is_array($fillable['order_items'])) {
+        if ( ! empty( $fillable['order_items'] ) && is_array( $fillable['order_items'] ) ) {
             $self->order_items = $fillable['order_items'];
         }
 
@@ -98,6 +101,30 @@ class Order
     {
         $this->order_items[] = $order_item;
 
+        return $this;
+    }
+
+    /**
+     * Set ID. Allows for chaining.
+     *
+     * @param $id
+     * @return $this
+     */
+    public function setYouPayID($id)
+    {
+        $this->youpay_id = $id;
+        return $this;
+    }
+
+    /**
+     * Set Store ID. Allows for chaining.
+     *
+     * @param $id
+     * @return $this
+     */
+    public function setStoreID($id)
+    {
+        $this->store_id = $id;
         return $this;
     }
 }
