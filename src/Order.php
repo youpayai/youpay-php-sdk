@@ -54,10 +54,16 @@ class Order
         $self->order_id = $fillable['order_id'];
         $self->store_id = $fillable['store_id'];
         $self->title = $fillable['title'];
-        $self->order_items = $fillable['order_items'];
-        $self->extra_fees = $fillable['extra_fees'];
         $self->sub_total = $fillable['sub_total'];
         $self->total = $fillable['total'];
+
+        // Optional
+        if (!empty($fillable['extra_fees']) && is_array($fillable['extra_fees'])) {
+            $self->extra_fees = $fillable['extra_fees'];
+        }
+        if (!empty($fillable['order_items']) && is_array($fillable['order_items'])) {
+            $self->order_items = $fillable['order_items'];
+        }
 
         return $self;
     }
