@@ -6,6 +6,11 @@ namespace YouPaySDK;
 class Order
 {
     /**
+     * @var string|null
+     */
+    public $id = null;
+
+    /**
      * @var string
      */
     public $order_id;
