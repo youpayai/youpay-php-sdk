@@ -183,6 +183,27 @@ class Client
     }
 
     /**
+     *
+     * @param $title
+     * @param string $logo
+     * @param string $description
+     */
+    public function updateStore($title, $logo = '', $description = '')
+    {
+        return json_decode(
+            $this->client()
+                ->post('/api/store/' . $this->store_id, [
+                    'json' => [
+                        'title' => $title,
+                        'logo' => $logo,
+                        'description' => $description,
+                    ]
+                ])
+                ->getBody()->getContents()
+        );
+    }
+
+    /**
      * Get the Guzzle Client
      *
      * @return \GuzzleHttp\Client
