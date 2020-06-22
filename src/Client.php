@@ -47,15 +47,22 @@ class Client
      *
      * @return object [status_code, access_token, store_id] || [status_code, message, error]
      */
-    public static function auth($email, $password, $domain)
+    public static function auth($email, $password, $domain, $store_type)
     {
         $self = new self();
 
+        $available_store_types = ['opencart','woocommerce'];
+
+        if ( ! in_array($store_type, $available_store_types)) {
+            throw new \Exception('Please select from one of the available store types: ' . implode($available_store_types, ', '));
+        }
+
         $response = $self->client()->post('/api/login', [
             'json' => [
-                'email' => $email,
-                'password' => $password,
-                'domain' => $domain
+                'email'      => $email,
+                'password'   => $password,
+                'domain'     => $domain,
+                'store_type' => $store_type
             ]
         ]);
 
