@@ -77,14 +77,16 @@ class Order
             $self->order_items = $fillable['order_items'];
         }
 
-        if ( ! empty( $fillable['receiver'] ) ) {
-            if ( ! $fillable['receiver'] instanceof Receiver ) {
-                $fillable['receiver'] = Receiver::create($fillable['receiver']);
-            } else {
-                throw new \Exception('Receiver not set as a class.');
-            }
-            $self->receiver = $fillable['receiver'];
+        if (
+            ! $fillable['receiver'] instanceof Receiver &&
+            ! empty($fillable['receiver']) &&
+            is_array($fillable['receiver'])
+        ) {
+            $fillable['receiver'] = Receiver::create($fillable['receiver']);
+        } else {
+            throw new \Exception('Receiver not set as a class.');
         }
+        $self->receiver = $fillable['receiver'];
 
         return $self;
     }
