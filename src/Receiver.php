@@ -68,12 +68,18 @@ class Receiver
             $user->phone = $fillable['phone'];
         }
         $user->email = $fillable['email'];
-        $user->address_1 = $fillable['address_1'];
-        $user->address_2 = $fillable['address_2'];
-        $user->suburb = $fillable['suburb'];
-        $user->state = $fillable['state'];
-        $user->country = $fillable['country'];
-        $user->postcode = $fillable['postcode'];
+
+        // Address is optional but all address fields are required when passing one through
+        if (!empty($fillable['address_1'])) {
+            $user->address_1 = $fillable['address_1'];
+            if ( !empty($fillable['address_2']) ) {
+                $user->phone = $fillable['address_2'];
+            }
+            $user->suburb = $fillable['suburb'];
+            $user->state = $fillable['state'];
+            $user->country = $fillable['country'];
+            $user->postcode = $fillable['postcode'];
+        }
 
         if (!empty($fillable['extra'])) {
             $user->extra = $fillable['extra'];
