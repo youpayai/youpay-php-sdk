@@ -31,6 +31,11 @@ class Order
     public $order_items = [];
 
     /**
+     * @var Receiver|null
+     */
+    public $reciever;
+
+    /**
      * Handling, fees, discounts and other line item totals
      *
      * @var float|false
@@ -70,6 +75,15 @@ class Order
         }
         if ( ! empty( $fillable['order_items'] ) && is_array( $fillable['order_items'] ) ) {
             $self->order_items = $fillable['order_items'];
+        }
+
+        if ( ! empty( $fillable['receiver'] ) ) {
+            if ( ! $fillable['receiver'] instanceof Receiver ) {
+                $fillable['receiver'] = Receiver::create($fillable['receiver']);
+            } else {
+                throw new \Exception('Receiver not set as a class.');
+            }
+            $self->receiver = $fillable['receiver'];
         }
 
         return $self;
