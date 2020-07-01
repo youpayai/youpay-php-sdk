@@ -64,7 +64,9 @@ class Receiver
     {
         $user = new self();
         $user->name = $fillable['name'];
-        $user->phone = $fillable['phone'];
+        if ( !empty($fillable['phone']) ) {
+            $user->phone = $fillable['phone'];
+        }
         $user->email = $fillable['email'];
         $user->address_1 = $fillable['address_1'];
         $user->address_2 = $fillable['address_2'];
