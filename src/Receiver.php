@@ -73,7 +73,7 @@ class Receiver
         if (!empty($fillable['address_1'])) {
             $user->address_1 = $fillable['address_1'];
             if ( !empty($fillable['address_2']) ) {
-                $user->phone = $fillable['address_2'];
+                $user->address_2 = $fillable['address_2'];
             }
             $user->suburb = $fillable['suburb'];
             $user->state = $fillable['state'];
