@@ -46,6 +46,7 @@ class Client
      * @param string $domain
      *
      * @return object [status_code, access_token, store_id] || [status_code, message, error]
+     * @throws \Exception Bad Data.
      */
     public static function auth($email, $password, $domain, $store_type)
     {
@@ -76,17 +77,17 @@ class Client
      *
      * @param string
      * @return array
+     * @throws \Exception Bad Response Exception.
      */
     public function listOrders()
     {
-        return json_decode(
+        return $this->handleResponse(
             $this->client()
                 ->post('/api/order/list', [
                     'json' => [
                         'store_id' => $this->store_id
                     ]
                 ])
-                ->getBody()->getContents()
         );
     }
 
@@ -94,13 +95,12 @@ class Client
      * List All Store Orders
      *
      * @return array
+     * @throws \Exception Bad Response Exception.
      */
     public function listAllOrders()
     {
-        return json_decode(
-            $this->client()
-                ->get('/api/order/list')
-                ->getBody()->getContents()
+        return $this->handleResponse(
+            $this->client()->get('/api/order/list')
         );
     }
 
@@ -109,12 +109,13 @@ class Client
      *
      * @param Order $order
      * @return mixed
+     * @throws \Exception Bad Response Exception.
      */
     public function postOrder(Order $order)
     {
         $path = ($order->youpay_id) ? "/api/order/{$order->youpay_id}" : '/api/order/create';
 
-        return json_decode(
+        return $this->handleResponse(
             $this->client()
                 ->post($path, [
                     'json' => [
@@ -122,7 +123,6 @@ class Client
                         'store_id' => $this->store_id
                     ]
                 ])
-                ->getBody()->getContents()
         );
     }
 
@@ -131,13 +131,12 @@ class Client
      *
      * @param $id
      * @return mixed
+     * @throws \Exception Bad Response Exception.
      */
     public function getOrder($id)
     {
-        return json_decode(
-            $this->client()
-                ->get('/api/order/' . $id)
-                ->getBody()->getContents()
+        return $this->handleResponse(
+            $this->client()->get('/api/order/' . $id)
         );
     }
 
@@ -146,13 +145,12 @@ class Client
      *
      * @param $id
      * @return mixed
+     * @throws \Exception Bad Response Exception.
      */
     public function getStore($id)
     {
-        return json_decode(
-            $this->client()
-                ->get('/api/store/' . $id)
-                ->getBody()->getContents()
+        return $this->handleResponse(
+            $this->client()->get('/api/store/' . $id)
         );
     }
 
@@ -160,13 +158,12 @@ class Client
      * Get the Stores
      *
      * @return mixed
+     * @throws \Exception Bad Response Exception.
      */
     public function getStores()
     {
-        return json_decode(
-            $this->client()
-                ->get('/api/stores/list')
-                ->getBody()->getContents()
+        return $this->handleResponse(
+            $this->client()->get('/api/stores/list')
         );
     }
 
@@ -178,26 +175,28 @@ class Client
      */
     public function findStore($domain)
     {
-        return json_decode(
+        return $this->handleResponse(
             $this->client()
                 ->post('/api/stores/find', [
                     'json' => [
                         'domain' => $domain
                     ]
                 ])
-                ->getBody()->getContents()
         );
     }
 
     /**
+     * Update Store Details
      *
      * @param $title
      * @param string $logo
      * @param string $description
+     * @return mixed|null
+     * @throws \Exception Bad Response Exception.
      */
     public function updateStore($title, $logo = '', $description = '')
     {
-        return json_decode(
+        return $this->handleResponse(
             $this->client()
                 ->post('/api/store/' . $this->store_id, [
                     'json' => [
@@ -206,7 +205,6 @@ class Client
                         'description' => $description,
                     ]
                 ])
-                ->getBody()->getContents()
         );
     }
 
@@ -231,6 +229,24 @@ class Client
             'timeout' => 2.0,
             'headers' => $headers
         ]);
+    }
+
+    /**
+     * Handle Response and return data
+     * TODO: Handle validation errors better
+     *
+     * @param $response
+     * @return mixed|null
+     * @throws \Exception
+     */
+    public function handleResponse($response)
+    {
+        $content = $response->getBody()->getContents();
+        $data = json_decode($content);
+        if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception('Unknown response data: ' . $content);
+        }
+        return $data;
     }
 
     /**
@@ -265,6 +281,7 @@ class Client
      * @see Order::create()
      * @param $fillable
      * @return Order
+     * @throws \Exception Bad Response Exception.
      */
     public function createOrderClass($fillable, $youpay_id = null)
     {
@@ -282,6 +299,7 @@ class Client
      * @param $fillable
      * @param null $youpay_id
      * @return mixed
+     * @throws \Exception Bad Response Exception.
      */
     public function createOrderFromArray($fillable, $youpay_id = null)
     {
