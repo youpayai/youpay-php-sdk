@@ -23,6 +23,14 @@ class Client
      */
     public $api_url = 'https://app.youpay.ai/api';
 
+    public function __construct()
+    {
+        if (defined('YOUPAY_APP_URL')) {
+            $this->api_url = YOUPAY_APP_URL;
+        }
+    }
+
+
     /**
      * Create the client
      *
