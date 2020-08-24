@@ -21,7 +21,7 @@ class Client
     /**
      * @var string API Url
      */
-    public $api_url = 'https://app.youpay.ai/api';
+    public $api_url = 'https://app.youpay.ai/';
 
     public function __construct()
     {
@@ -313,5 +313,23 @@ class Client
     {
         $order = $this->createOrderClass($fillable, $youpay_id);
         return $this->postOrder($order);
+    }
+
+    /**
+     * Get Checkout JS Url
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getCheckoutJSUrl()
+    {
+        try {
+            $data = $this->handleResponse(
+                $this->client()->get('/api/checkoutjs')
+            );
+            return $data->url;
+        } catch (\Exception $exception) {}
+
+        return  $this->api_url . '/checkout.js?version_not_found=' . time();
     }
 }
