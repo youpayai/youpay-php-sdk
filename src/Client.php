@@ -332,4 +332,16 @@ class Client
 
         return  $this->api_url . '/checkout.js?version_not_found=' . time();
     }
+
+    /**
+     * Get Checkout JS Url
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function checkoutUrl()
+    {
+        $self = new self();
+        return $self->getCheckoutJSUrl();
+    }
 }
