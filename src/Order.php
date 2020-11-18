@@ -33,7 +33,7 @@ class Order
     /**
      * @var Receiver|null
      */
-    public $reciever;
+    public $receiver;
 
     /**
      * Handling, fees, discounts and other line item totals
