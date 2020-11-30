@@ -234,7 +234,7 @@ class Client
             // Base URI is used with relative requests
             'base_uri' => $this->api_url,
             // You can set any number of default request options.
-            'timeout' => 2.0,
+            'timeout' => 60.0,
             'headers' => $headers
         ]);
     }
