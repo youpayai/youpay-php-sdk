@@ -60,7 +60,7 @@ class Client
     {
         $self = new self();
 
-        $available_store_types = ['opencart','woocommerce'];
+        $available_store_types = ['opencart', 'woocommerce', 'shopify'];
 
         if ( ! in_array($store_type, $available_store_types)) {
             throw new \Exception('Please select from one of the available store types: ' . implode($available_store_types, ', '));
