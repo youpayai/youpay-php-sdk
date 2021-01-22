@@ -321,16 +321,12 @@ class Client
      * @return mixed
      * @throws \Exception
      */
-    public function getCheckoutJSUrl()
+    public function getCheckoutJSUrl($unique_id = false)
     {
-        try {
-            $data = $this->handleResponse(
-                $this->client()->get('/api/checkoutjs')
-            );
-            return $data->url;
-        } catch (\Exception $exception) {}
-
-        return  $this->api_url . '/checkout.js?version_not_found=' . time();
+    	if ($unique_id) {
+		    return  $this->api_url . '/checkout.js?unique=' . $unique_id;
+	    }
+        return  $this->api_url . '/checkout.js?random=' . time();
     }
 
     /**
@@ -339,9 +335,9 @@ class Client
      * @return mixed
      * @throws \Exception
      */
-    public static function checkoutUrl()
+    public static function checkoutUrl($unique_id = false)
     {
         $self = new self();
-        return $self->getCheckoutJSUrl();
+        return $self->getCheckoutJSUrl($unique_id);
     }
 }
