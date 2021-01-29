@@ -87,13 +87,14 @@ class Client
      * @return array
      * @throws \Exception Bad Response Exception.
      */
-    public function listOrders()
+    public function listOrders($limit = 10)
     {
         return $this->handleResponse(
             $this->client()
                 ->post('/api/order/list', [
                     'json' => [
-                        'store_id' => $this->store_id
+                        'store_id' => $this->store_id,
+	                    'limit' => $limit
                     ]
                 ])
         );
@@ -105,12 +106,54 @@ class Client
      * @return array
      * @throws \Exception Bad Response Exception.
      */
-    public function listAllOrders()
+    public function listAllOrders($limit = 10)
     {
         return $this->handleResponse(
-            $this->client()->get('/api/order/list')
+            $this->client()->post('/api/order/list', [
+	            'json' => [
+		            'limit' => $limit
+	            ]
+            ])
         );
     }
+
+
+	/**
+	 * List All Store Payments
+	 *
+	 * @param string
+	 * @return array
+	 * @throws \Exception Bad Response Exception.
+	 */
+	public function listPayments($limit = 10)
+	{
+		return $this->handleResponse(
+			$this->client()
+			     ->post('/api/payments/list', [
+				     'json' => [
+					     'store_id' => $this->store_id,
+					     'limit' => $limit
+				     ]
+			     ])
+		);
+	}
+
+	/**
+	 * List All Store Payments
+	 *
+	 * @return array
+	 * @throws \Exception Bad Response Exception.
+	 */
+	public function listAllPayments($limit = 10)
+	{
+		return $this->handleResponse(
+			$this->client()->post('/api/payments/list', [
+				'json' => [
+					'limit' => $limit
+				]
+			])
+		);
+	}
 
     /**
      * Create or Update an Order
@@ -155,8 +198,11 @@ class Client
      * @return mixed
      * @throws \Exception Bad Response Exception.
      */
-    public function getStore($id)
+    public function getStore($id = false)
     {
+    	if (!$id) {
+    		$id = $this->store_id;
+	    }
         return $this->handleResponse(
             $this->client()->get('/api/store/' . $id)
         );
