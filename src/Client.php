@@ -377,7 +377,7 @@ class Client
 				    'url' => $url
 			    ]
 		    ])
-	    );
+	    )->url;
     }
 
     /**
