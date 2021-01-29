@@ -361,6 +361,25 @@ class Client
         return $this->postOrder($order);
     }
 
+	/**
+	 * Magic Login Link for URL
+	 *
+	 * @param $url
+	 *
+	 * @return mixed|null
+	 * @throws \Exception
+	 */
+    public function link($url = '/dashboards/main')
+    {
+	    return $this->handleResponse(
+		    $this->client()->post('/api/magic-link', [
+			    'json' => [
+				    'url' => $url
+			    ]
+		    ])
+	    );
+    }
+
     /**
      * Get Checkout JS Url
      *
