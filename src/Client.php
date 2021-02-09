@@ -191,6 +191,21 @@ class Client
         );
     }
 
+	/**
+	 * Cancel Order
+	 *
+	 * @param $id
+	 *
+	 * @return mixed|null
+	 * @throws \Exception
+	 */
+    public function cancelOrder($id)
+    {
+	    return $this->handleResponse(
+		    $this->client()->get('/api/order/' . $id . '/cancel')
+	    );
+    }
+
     /**
      * Get the Store by ID
      *
