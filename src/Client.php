@@ -159,10 +159,11 @@ class Client
      * Create or Update an Order
      *
      * @param Order $order
+     * @param mixed $params Extra data to pass to the request
      * @return mixed
      * @throws \Exception Bad Response Exception.
      */
-    public function postOrder(Order $order)
+    public function postOrder(Order $order, $params = null)
     {
         $path = ($order->youpay_id) ? "/api/order/{$order->youpay_id}" : '/api/order/create';
 
@@ -171,7 +172,8 @@ class Client
                 ->post($path, [
                     'json' => [
                         'order' => $order,
-                        'store_id' => $this->store_id
+                        'store_id' => $this->store_id,
+	                    'params' => $params
                     ]
                 ])
         );
@@ -372,8 +374,10 @@ class Client
      */
     public function createOrderFromArray($fillable, $youpay_id = null)
     {
-        $order = $this->createOrderClass($fillable, $youpay_id);
-        return $this->postOrder($order);
+        return $this->postOrder(
+	        $this->createOrderClass($fillable, $youpay_id),
+	        (!empty($fillable['params'])) ? $fillable['params'] : null
+        );
     }
 
 	/**
