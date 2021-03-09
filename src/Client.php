@@ -407,10 +407,10 @@ class Client
      */
     public function getCheckoutJSUrl($unique_id = false)
     {
-    	if ($unique_id) {
-		    return  $this->api_url . '/checkout.js?unique=' . $unique_id;
+	    if ($unique_id) {
+		    return  rtrim($this->api_url, '/') . '/checkout.js?unique=' . $unique_id;
 	    }
-        return  $this->api_url . '/checkout.js?random=' . time();
+	    return  rtrim($this->api_url, '/') . '/checkout.js?random=' . time();
     }
 
     /**
