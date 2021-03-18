@@ -1,5 +1,5 @@
 {
-	"name": "myworkaus/youpay-php-sdk",
+	"name": "youpayai/youpay-php-sdk",
 	"description": "YouPay PHP SDK",
 	"license": "GPL-2.0+",
 	"require": {
