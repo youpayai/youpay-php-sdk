@@ -47,11 +47,15 @@ class Client
     }
 
     /**
-     * Get API Token
+     * Static method for login and API Token generation
      *
+     * This will create the store if it doesn't already exist
+     *
+     * @see login
      * @param string $email
      * @param string $password
      * @param string $domain
+     * @param string $store_type
      *
      * @return object [status_code, access_token, store_id] || [status_code, message, error]
      * @throws \Exception Bad Data.
@@ -59,24 +63,54 @@ class Client
     public static function auth($email, $password, $domain, $store_type)
     {
         $self = new self();
+        return $self->login($email, $password, $domain, $store_type);
+    }
 
-//        $available_store_types = ['opencart', 'woocommerce', 'shopify'];
-//
-//        if ( ! in_array($store_type, $available_store_types)) {
-//            throw new \Exception('Please select from one of the available store types: ' . implode($available_store_types, ', '));
-//        }
-
-        $response = $self->client()->post('/api/login', [
-            'json' => [
-                'email'      => $email,
-                'password'   => $password,
-                'domain'     => $domain,
-                'store_type' => $store_type
-            ]
-        ]);
-
+    /**
+     * Login and get API Token
+     *
+     * This will create the store if it doesn't already exist
+     *
+     * @param $email
+     * @param $password
+     * @param $domain
+     * @param $store_type
+     *
+     * @return object [status_code, access_token, store_id] || [status_code, message, error]
+     * @throws \Exception Bad Data.
+     */
+    public function login($email, $password, $domain, $store_type)
+    {
         return json_decode(
-            $response->getBody()->getContents()
+            $response = $this->client()->post('/api/login', [
+                'json' => [
+                    'email'      => $email,
+                    'password'   => $password,
+                    'domain'     => $domain,
+                    'store_type' => $store_type
+                ]
+            ])->getBody()->getContents()
+        );
+    }
+
+    /**
+     * Fetch Bearer Token
+     *
+     * @param $email
+     * @param $password
+     *
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function fetchToken($email, $password)
+    {
+        return json_decode(
+            $this->client()->post('/api/fetch-token', [
+                'json' => [
+                    'email'      => $email,
+                    'password'   => $password
+                ]
+            ])->getBody()->getContents()
         );
     }
 
@@ -231,7 +265,7 @@ class Client
      * @return mixed
      * @throws \Exception Bad Response Exception.
      */
-    public function getStores()
+    public function listStores()
     {
         return $this->handleResponse(
             $this->client()->get('/api/stores/list')

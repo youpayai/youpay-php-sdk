@@ -74,19 +74,19 @@ class Order
             $self->extra_fees = $fillable['extra_fees'];
         }
         if ( ! empty( $fillable['order_items'] ) && is_array( $fillable['order_items'] ) ) {
-            $self->order_items = $fillable['order_items'];
+            foreach ($fillable['order_items'] as $order_item) {
+                $self->create_order_item($order_item);
+            }
         }
 
-        if (
-            ! $fillable['receiver'] instanceof Receiver &&
-            ! empty($fillable['receiver']) &&
-            is_array($fillable['receiver'])
-        ) {
-            $fillable['receiver'] = Receiver::create($fillable['receiver']);
+        if ( ! empty($fillable['receiver'])) {
+            if (! $fillable['receiver'] instanceof Receiver) {
+                $fillable['receiver'] = Receiver::create($fillable['receiver']);
+            }
+            $self->receiver = $fillable['receiver'];
         } else {
-            throw new \Exception('Receiver not set as a class.');
+            throw new \Exception('Receiver not set.');
         }
-        $self->receiver = $fillable['receiver'];
 
         return $self;
     }
@@ -97,9 +97,11 @@ class Order
      * @param $fillable
      * @return $this
      */
-    public function create_order_item($fillable)
+    public function create_order_item($item)
     {
-        $item = OrderItem::create($fillable);
+        if (! $item instanceof OrderItem) {
+            $item = OrderItem::create($item);
+        }
 
         $this->order_items[] = $item;
 
