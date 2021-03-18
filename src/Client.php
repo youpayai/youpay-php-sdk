@@ -21,10 +21,14 @@ class Client
     /**
      * @var string API Url
      */
-    public $api_url = 'https://app.youpay.ai/';
+    public $api_url = 'https://api.youpay.ai/';
 
     public function __construct()
     {
+        if (defined('YOUPAY_API_URL')) {
+            $this->api_url = YOUPAY_API_URL;
+        }
+        // Legacy
         if (defined('YOUPAY_APP_URL')) {
             $this->api_url = YOUPAY_APP_URL;
         }
