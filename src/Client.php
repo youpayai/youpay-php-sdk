@@ -34,7 +34,6 @@ class Client
         }
     }
 
-
     /**
      * Create the client
      *
@@ -324,8 +323,10 @@ class Client
      */
     public function client()
     {
-        // TODO: prevent redirects. Should error out. Also increase timeout.
-        $headers = ['Content-Type' => 'application/json'];
+        $headers = [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ];
 
         if (!empty($this->token)) {
             $headers['Authorization'] = 'Bearer ' . $this->token;
@@ -346,7 +347,6 @@ class Client
      *
      * @param $response
      * @return mixed|null
-     * @throws \Exception
      */
     public function handleResponse($response)
     {

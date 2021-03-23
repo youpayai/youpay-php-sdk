@@ -40,7 +40,7 @@ class Order
      *
      * @var float|false
      */
-    public $extra_fees = false;
+    public $extra_fees;
 
     /**
      * @var float
