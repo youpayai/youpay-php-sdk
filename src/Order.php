@@ -85,8 +85,11 @@ class Order
         }
 
         if ( ! empty( $fillable['order_totals'] ) && is_array( $fillable['order_totals'] ) ) {
-            foreach ($fillable['order_totals'] as $order_total) {
-                $self->create_order_item($order_total);
+            foreach ($fillable['order_totals'] as $key => $order_total) {
+                if (empty($order_total['sort_order'])) {
+                    $order_total['sort_order'] = $key;
+                }
+                $self->create_order_total($order_total);
             }
         }
 

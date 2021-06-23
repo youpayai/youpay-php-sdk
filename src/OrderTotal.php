@@ -35,11 +35,7 @@ class OrderTotal
         $total = new self();
         $total->title = $fillable['title'];
         $total->value = $fillable['value'];
-
-        // Option Fields
-        if ( ! empty($fillable['sort_order']) ) {
-            $total->sort_order = $fillable['sort_order'];
-        }
+        $total->sort_order = $fillable['sort_order'];
 
         return $total;
     }
