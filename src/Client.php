@@ -21,7 +21,7 @@ class Client
     /**
      * @var string API Url
      */
-    public $api_url = 'https://v1.youpay.ai/';
+    public $api_url = 'https://api.youpay.ai/';
 
     /**
      * @var string APP Url
