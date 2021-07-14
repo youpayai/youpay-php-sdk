@@ -377,7 +377,7 @@ class Client
         if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
             throw new \Exception('Unknown response data: ' . $content);
         }
-        if (!empty($data->data)) {
+        if (isset($data->data)) {
             return $data->data;
         }
         return $data;
