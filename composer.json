@@ -5,7 +5,7 @@
 	"require": {
 		"php":  ">=5.6",
 		"guzzlehttp/guzzle": ">=6.5",
-		"symfony/polyfill-intl-idn": "1.17.*",
+		"symfony/polyfill-intl-idn": "^v1.17.1",
 		"ext-json": "*"
 	},
 	"require-dev": {
