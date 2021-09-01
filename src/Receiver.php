@@ -11,6 +11,11 @@ class Receiver
     public $name;
 
     /**
+     * @var string User ID
+     */
+    public $user_id;
+
+    /**
      * @var string Phone Number
      */
     public $phone;
@@ -63,6 +68,12 @@ class Receiver
     public static function create($fillable)
     {
         $user = new self();
+
+        if (!empty($fillable['user_id'])) {
+            $user->user_id = $fillable['user_id'];
+            return $user;
+        }
+
         $user->name = $fillable['name'];
         if ( !empty($fillable['phone']) ) {
             $user->phone = $fillable['phone'];
