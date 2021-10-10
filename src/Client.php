@@ -1,6 +1,8 @@
 <?php
 namespace YouPaySDK;
 
+use GuzzleHttp\Exception\GuzzleException;
+
 /**
  * YouPay Client
  *
@@ -65,7 +67,7 @@ class Client
      * @param string $store_type
      *
      * @return object [status_code, access_token, store_id] || [status_code, message, error]
-     * @throws \Exception Bad Data.
+     * @throws Exception Bad Data.
      */
     public static function auth($email, $password, $domain, $store_type)
     {
@@ -84,7 +86,7 @@ class Client
      * @param $store_type
      *
      * @return object [status_code, access_token, store_id] || [status_code, message, error]
-     * @throws \Exception Bad Data.
+     * @throws Exception Bad Data.
      */
     public function login($email, $password, $domain, $store_type)
     {
@@ -126,7 +128,7 @@ class Client
      *
      * @param string
      * @return array
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function listOrders($limit = 10)
     {
@@ -139,7 +141,7 @@ class Client
      * List All Store Orders
      *
      * @return array
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function listAllOrders($limit = 10)
     {
@@ -153,7 +155,7 @@ class Client
 	 *
 	 * @param string
 	 * @return array
-	 * @throws \Exception Bad Response Exception.
+	 * @throws Exception Bad Response Exception.
 	 */
 	public function listPayments($limit = 10)
 	{
@@ -166,7 +168,7 @@ class Client
 	 * List All Store Payments
 	 *
 	 * @return array
-	 * @throws \Exception Bad Response Exception.
+	 * @throws Exception Bad Response Exception.
 	 */
 	public function listAllPayments($limit = 10)
 	{
@@ -182,7 +184,7 @@ class Client
      * @param mixed $params Extra data to pass to the request
      * @return mixed
      * @deprecated
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function postOrder(Order $order, $params = null)
     {
@@ -243,7 +245,7 @@ class Client
      *
      * @param $id
      * @return mixed
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function getOrder($id)
     {
@@ -258,7 +260,7 @@ class Client
 	 * @param $id
 	 *
 	 * @return mixed|null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
     public function cancelOrder($id)
     {
@@ -272,7 +274,7 @@ class Client
      *
      * @param $id
      * @return mixed
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function getStore($id = false)
     {
@@ -288,7 +290,7 @@ class Client
      * Get the Stores
      *
      * @return mixed
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function listStores()
     {
@@ -322,7 +324,7 @@ class Client
      * @param string $logo
      * @param string $description
      * @return mixed|null
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function updateStore($title, $logo = '', $description = '')
     {
@@ -375,7 +377,7 @@ class Client
         $content = $response->getBody()->getContents();
         $data = json_decode($content);
         if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
-            throw new \Exception('Unknown response data: ' . $content);
+            throw new Exception('Unknown response data: ' . $content);
         }
         if (isset($data->data)) {
             return $data->data;
@@ -415,7 +417,7 @@ class Client
      * @see Order::create()
      * @param $fillable
      * @return Order
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function createOrderClass($fillable, $youpay_id = null)
     {
@@ -433,7 +435,7 @@ class Client
      * @param $fillable
      * @param null $youpay_id
      * @return mixed
-     * @throws \Exception Bad Response Exception.
+     * @throws Exception Bad Response Exception.
      */
     public function createOrderFromArray($fillable, $youpay_id = null)
     {
@@ -449,7 +451,7 @@ class Client
 	 * @param $url
 	 *
 	 * @return mixed|null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
     public function link($url = '/dashboards/main')
     {
@@ -466,7 +468,7 @@ class Client
      * Get Checkout JS Url
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getCheckoutJSUrl($unique_id = false)
     {
@@ -480,11 +482,25 @@ class Client
      * Get Checkout JS Url
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public static function checkoutUrl($unique_id = false)
     {
         $self = new self();
         return $self->getCheckoutJSUrl($unique_id);
+    }
+
+	/**
+	 * Check that YouPay is online and returning a ping
+	 *
+	 * @return bool
+	 */
+    public function ping()
+    {
+    	try {
+		    return $this->client()->get( '/v1/ping' )->getStatusCode() === 200;
+	    } catch ( GuzzleException $exception ){
+    		return false;
+	    }
     }
 }
