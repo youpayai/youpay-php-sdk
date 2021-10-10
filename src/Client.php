@@ -2,6 +2,7 @@
 namespace YouPaySDK;
 
 use GuzzleHttp\Exception\GuzzleException;
+use Exception;
 
 /**
  * YouPay Client
