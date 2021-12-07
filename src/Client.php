@@ -1,6 +1,7 @@
 <?php
 namespace YouPaySDK;
 
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Exception;
 
@@ -25,6 +26,11 @@ class Client
      * @var string API Url
      */
     public $api_url = 'https://api.youpay.ai/';
+
+    /**
+     * @var ClientInterface
+     */
+    public $client;
 
     /**
      * @var string APP Url
@@ -151,7 +157,7 @@ class Client
         );
     }
 
-	/**
+    /**
 	 * List All Store Payments
 	 *
 	 * @param string
@@ -165,7 +171,7 @@ class Client
 		);
 	}
 
-	/**
+    /**
 	 * List All Store Payments
 	 *
 	 * @return array
@@ -255,7 +261,7 @@ class Client
         );
     }
 
-	/**
+    /**
 	 * Cancel Order
 	 *
 	 * @param $id
@@ -342,6 +348,16 @@ class Client
     }
 
     /**
+     * Override the default Guzzle Client
+     *
+     * @param  ClientInterface  $client
+     */
+    public function setClient(ClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
      * Get the Guzzle Client
      *
      * @return \GuzzleHttp\Client
@@ -355,6 +371,10 @@ class Client
 
         if (!empty($this->token)) {
             $headers['Authorization'] = 'Bearer ' . $this->token;
+        }
+
+        if (!$this->client) {
+            return $this->client;
         }
 
         return new \GuzzleHttp\Client([
