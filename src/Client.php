@@ -373,7 +373,7 @@ class Client
             $headers['Authorization'] = 'Bearer ' . $this->token;
         }
 
-        if (!$this->client) {
+        if (isset($this->client)) {
             return $this->client;
         }
 
