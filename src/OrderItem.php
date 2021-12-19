@@ -93,7 +93,7 @@ class OrderItem
         $item->total = $fillable['total'];
 
         // Optional Fields
-        $item->discount_label = ! empty($fillable['discount_label']) ? $fillable['discount_label'] : 0;
+        $item->discount_label = ! empty($fillable['discount_label']) ? $fillable['discount_label'] : '';
         $item->discounted_total = ! empty($fillable['discounted_total']) ? $fillable['discounted_total'] : 0;
         $item->description = ! empty($fillable['description']) ? $fillable['description'] : null;
         $item->variants = ! empty($fillable['variants']) ? $fillable['variants'] : [];
