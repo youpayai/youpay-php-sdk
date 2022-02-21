@@ -21,6 +21,11 @@ class OrderTotal
     public $sort_order;
 
     /**
+     * @var string
+     */
+    private $key;
+
+    /**
      * Create Order Total
      *
      * @param array $fillable [
@@ -36,6 +41,7 @@ class OrderTotal
         $total->title = $fillable['title'];
         $total->value = $fillable['value'];
         $total->sort_order = $fillable['sort_order'];
+        $total->key = $fillable['key'];
 
         return $total;
     }
