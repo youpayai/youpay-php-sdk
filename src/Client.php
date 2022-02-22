@@ -524,4 +524,23 @@ class Client
     		return false;
 	    }
     }
+
+    /**
+     * Get the Order by Store Order ID
+     *
+     * @param $id
+     * @return mixed
+     * @throws Exception Bad Response Exception.
+     */
+    public function getOrderByStoreOrderID($id)
+    {
+        try {
+            return $this->handleResponse(
+                $this->client()->get('/v1/order/store-order-id/' . $id)
+            );
+        } catch(exception $e) {
+            return null;
+        }
+    }
+
 }
