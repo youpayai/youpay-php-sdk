@@ -23,7 +23,7 @@ class OrderTotal
     /**
      * @var string
      */
-    private $key;
+    public $key;
 
     /**
      * Create Order Total
