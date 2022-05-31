@@ -355,33 +355,39 @@ class Client
     public function setClient(ClientInterface $client)
     {
         $this->client = $client;
+
+        return $this;
     }
 
     /**
      * Get the Guzzle Client
      *
+     * @param  array  $additional_headers
+     * @param  float  $timeout
+     *
      * @return \GuzzleHttp\Client
      */
-    public function client()
+    public function client(array $additional_headers = [], $timeout = 60.0)
     {
-        $headers = [
+        if (isset($this->client)) {
+            return $this->client;
+        }
+
+        $headers = array_merge([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json'
-        ];
+        ], $additional_headers);
 
         if (!empty($this->token)) {
             $headers['Authorization'] = 'Bearer ' . $this->token;
         }
 
-        if (isset($this->client)) {
-            return $this->client;
-        }
 
         return new \GuzzleHttp\Client([
             // Base URI is used with relative requests
             'base_uri' => $this->api_url,
             // You can set any number of default request options.
-            'timeout' => 60.0,
+            'timeout' => $timeout,
             'headers' => $headers
         ]);
     }
