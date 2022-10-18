@@ -58,6 +58,11 @@ class Order
     public $total;
 
     /**
+     * @var string Currency code
+     */
+    public $currency_change;
+
+    /**
      * Static way to initialize the class
      *
      * @param array $fillable [order_id, store_id, title, order_items, extra_fees, sub_total, total]
@@ -100,6 +105,11 @@ class Order
             $self->receiver = $fillable['receiver'];
         } else {
             throw new \Exception('Receiver not set.');
+        }
+
+        // Pass through the currency code for which we are changing from to notify the user
+        if ( ! empty($fillable['currency_change'])) {
+            $self->currency_change = $fillable['currency_change'];
         }
 
         return $self;
